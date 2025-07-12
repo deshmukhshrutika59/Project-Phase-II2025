@@ -1,0 +1,552 @@
+---
+title: "Relational Algebra – Auto Question Generator Report"
+format:
+  html:
+    toc: true
+    toc-location: right
+    toc-title: "Contents"
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    
+    
+---
+
+
+##  Domain Understanding: Relational Algebra
+
+### Academic Foundation
+
+As part of our undergraduate curriculum in **Database Management Systems (DBMS)**, we were introduced to **Relational Algebra (RA)**—the formal foundation of query languages like SQL. The syllabus covered core relational operations such as:
+
+- **Selection (σ), Projection (π), and Rename (ρ)**
+- **Set operations** like Union, Intersection, and Difference
+- **Cartesian Product and Natural Join**
+
+However, the level of abstraction required for building a **relational algebra-based question generation system** was not thoroughly explored in class.
+
+### Foundational Topics (FT)
+
+| Topic                | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| Relation and Schema  | Understanding what a relation (table) is, including schema (attribute names and domains). |
+| Selection (σ)        | Filters rows based on a condition, e.g., `σ_age > 25(Employee)`            |
+| Projection (π)       | Selects specific columns, e.g., `π_name, age(Employee)`                    |
+| Renaming (ρ)         | Changes the name of a relation or its attributes, e.g., `ρ(Emp)(Employee)` |
+| Union (∪)            | Combines tuples from two relations with the same schema.                   |
+| Intersection (∩)     | Returns a new relation containing only the tuples that are present in both input relations. |
+| Set Difference (−)   | Retrieves tuples in one relation and not in the other.                    |
+| Cartesian Product (×)| Produces all possible combinations of tuples from two relations.         |
+
+### Intermediate Topics (IT)
+
+| Topic             | Description                                                         |
+|------------------|---------------------------------------------------------------------|
+| Natural Join (⋈) | Combines tuples from two relations using common attributes.         |
+| Theta Join (⋈θ)  | Join using an arbitrary condition.                                  |
+| Equi-Join         | A theta join with equality conditions only.                         |
+| Division (÷)      | Finds tuples in one relation that are related to all tuples in another. |
+| Combining Operations | Writing and interpreting expressions with multiple operators.      |
+
+### Advanced Topics (AT)
+
+| Topic                    | Description                                        |
+|--------------------------|----------------------------------------------------|
+| Outer Joins              | Extended RA operations like left, right, full joins|
+| Extended Relational Algebra | Extensions like aggregate functions, grouping     |
+| RA-based Query Plans     | How DBMSs represent query plans using RA.          |
+
+### Knowledge Gaps Identified
+
+We initially lacked depth in:
+
+- Mapping real-world queries to relational algebra expressions
+- Generating questions across difficulty levels
+- Automating query construction based on schema
+- Designing diverse question types (MCQ, TFQ, etc.)
+- Validating query equivalence
+
+### Self-Driven Learning
+
+To address this:
+
+- We referred to **GeeksforGeeks**, **TutorialsPoint**, academic PDFs
+- Watched **YouTube** tutorials
+- Used **ChatGPT** to simulate queries
+- Created **unit tests** to validate logic
+- Studied sample schemas to test generalization
+
+### Realization and Commitment
+
+We discovered RA's value for:
+
+- Logical query design
+- Query optimization
+- Assessment and learning
+
+We commit to:
+
+- Expanding support for Division and Outer Joins
+- Enhancing natural language generation
+- Adding ER-based visual aids
+
+##  Topic-Question Mapping
+
+###  Question Type Role Breakdown
+
+| Type | Stands for               | Best Use Areas                                         |
+|------|--------------------------|--------------------------------------------------------|
+| GQA  | Generated Query Answer   | Generates RA expressions for questions                 |
+| TFQ  | True/False Questions     | Concept validation, logic checks                       |
+| MCQ  | Multiple Choice          | Identify correct/incorrect expressions, logic testing  |
+| ECQ  | Expression Completion    | Fill in missing parts of RA expressions                |
+| DIQ  | Diagram Interpretation   | Analyze RA trees or schema structure                   |
+| OEQ  | Open-Ended               | Write RA expressions from NL queries                   |
+
+###  Operation-Level Categorization Strategy
+
+RA operations are classified by difficulty:
+
+- **Level 1 (Easy)**: Basic filters, projections, renaming
+- **Level 2 (Medium)**: Multi-step logic, combinations, join filters
+- **Level 3 (Hard)**: Nested logic, multiple operators, abstractions
+
+**Selection, Projection, Set Operations, Joins, Division** → all 3 levels
+
+**Rename (ρ)** → simple, single-level
+
+All question types (GQA, TFQ, MCQ, ECQ, DIQ, OEQ) are supported per operation
+
+This structure ensures progressive, meaningful learning.
+
+##  Algorithm Design – Relational Algebra Question Generator with ER Diagram & QA Output
+
+This project dynamically generates relational algebra questions based on user input and provides a visual understanding through an ER diagram. The algorithm is built to support multiple operations, difficulty levels, and question types, and outputs both questions and their corresponding RA expressions.
+
+### Step-by-Step Logic Flow
+
+####  User Inputs
+
+- Operation – Selection, Join, Projection, etc.
+- Difficulty Level – Level 1 (Easy), Level 2 (Medium), Level 3 (Hard)
+- Question Type – GQA, MCQ, TFQ, ECQ, DIQ, OEQ
+- Number of Questions – e.g., 5
+
+####  ER Diagram Display
+
+- Displays the ER diagram related to the selected database schema
+- Can be a static image or dynamically rendered from schema definitions
+
+####  Generator Selection
+
+- Backend selects the appropriate generator class (e.g., SelectionGenerator, ProjectionGenerator)
+
+####  Filtering Based on User Inputs
+
+Filters available question templates using:
+
+- Operation
+- Difficulty Level
+- Question Type
+
+####  Question and Answer Generation
+
+Questions are created using predefined or dynamic templates. Each includes a corresponding RA expression as the correct answer.
+
+```json
+{
+  "question": "Which operation filters entries with dept_name = 'CS'?",
+  "answer": "σ(dept_name = 'CS')(instructor)",
+  "type": "MCQ",
+  "level": "1",
+  "operation": "Selection"
+}
+```
+
+####  Output Rendering
+
+The output includes:
+
+- 📌 ER Diagram (top of page)
+- 📌 Question Type (e.g., MCQ, TFQ)
+- 📌 Generated Questions with RA expressions
+- 📌 Sample Table Schema and Data (if available)
+
+####  Repeat Until Complete
+
+The system continues generating questions until the desired number is reached.
+
+#### Output Preview Layout
+
+```
++-------------------------------+
+|          ER Diagram           |
++-------------------------------+
+
+Question Type: ECQ
+
+Q1: Fill in the blank: σ(____ = 'CS')(instructor)
+RA: dept_name
+
+...more questions...
+
++-------------------------------+
+|     Sample Data (Optional)   |
++-------------------------------+
+| id | name  | dept_name  | ...|
+|----|-------|------------|----|
+| 1  | Krish |    CS      | .. |
+```
+
+##  Template Development
+
+### Generated Query Answer (GQA)
+
+```json
+{
+  "level": "Level 01",
+  "type": "GQA",
+  "topic": "Selection",
+  "question": "Find all fertilizers of type 'NPK'",
+  "answer": "σ(fertilizer_type = 'NPK')(fertilizers)"
+}
+```
+
+### True/False Question (TFQ)
+
+```json
+{
+  "level": "Level 01",
+  "type": "TFQ",
+  "topic": "Projection",
+  "question": "True or False: Projection (π) is used to select columns from a table",
+  "answer": "False"
+}
+```
+
+### Multiple Choice Question (MCQ)
+
+```json
+{
+  "level": "Level 02",
+  "type": "MCQ",
+  "topic": "Projection",
+  "question": "Show all crop type where season is 'Summer'",
+  "options": [
+    "π(crop_type)(crops)",
+    "σ(crop_type)(crops)",
+    "π crop_type (σ season = 'Summer' (crops))",
+    "None of these options are correct."
+  ],
+  "answer": "π crop_type (σ season = 'Summer' (crops))"
+}
+```
+
+### Matching-Type Question
+
+```json
+{
+  "level": "Level 01",
+  "type": "MCQ",
+  "topic": "Selection",
+  "question": "Match the relational algebra operator to its business meaning:",
+  "options": [
+    "×: (a) Filter records based on a condition (e.g., only employees in a certain department)",
+    "σ: (b) Combine every record from two tables (all possible pairs)",
+    "π: (c) Show only specific columns (e.g., just names and salaries)"
+  ],
+  "answer": "× → (b), σ → (a), π → (c)"
+}
+```
+
+### Expression Completion Question (ECQ)
+
+```json
+{
+  "level": "Level 01",
+  "type": "ECQ",
+  "topic": "Selection",
+  "question": "Complete the expression to get Crop ID = 211 only:",
+  "expression": "π(crop_id)(_____)",
+  "expected_fill": "σ(crop_id = 211)(fertilizers)"
+}
+```
+
+### Diagram Interpretation Question (DIQ)
+
+```json
+{
+  "level": "Level 01",
+  "type": "DIQ",
+  "topic": "Selection",
+  "question": "Given the relational algebra tree:\nπ_quantity\n|\nσ_{quantity = 40}\n|\nfertilizers\nIdentify the resulting attribute set.",
+  "answer": "{quantity}"
+}
+```
+
+### Open-Ended Question (OEQ)
+
+```json
+{
+  "level": "Level 01",
+  "type": "OEQ",
+  "topic": "Selection",
+  "question": "Write an expression to show all records where Fertilizer type is either 'Bio-fertilizer' or NULL.",
+  "answer": "σ(fertilizer_type = 'Bio-fertilizer' OR fertilizer_type IS NULL)(fertilizers)"
+}
+```
+
+##  Difficulty Calibration
+
+### Categorized Operations by Difficulty Level
+
+### Level 1
+
+| Operation            | Description                          | Example                                        |
+|----------------------|--------------------------------------|------------------------------------------------|
+| Selection (σ)        | Simple filters using equality        | σ(dept_name = 'CS')(instructor)                |
+| Projection (π)       | Projecting a single attribute        | π(dept_name)(instructor)                       |
+| Rename (ρ)           | Renaming a relation                  | ρ(Prof ← instructor)                           |
+| Cartesian Product (×)| Basic cross join without conditions  | instructor × department                        |
+| Union (∪)            | Combining all rows from two relations| instructor ∪ department                        |
+| Intersection (∩)     | Common rows from two identical relations | instructor ∩ teaching_staff               |
+| Difference (−)       | Rows in one relation but not in another | instructor − retired_faculty              |
+| Join (⨝)             | Natural join on common attributes    | instructor ⨝ department                        |
+
+---
+
+### Level 2
+
+| Operation            | Description                            | Example                                                             |
+|----------------------|----------------------------------------|---------------------------------------------------------------------|
+| Selection (σ)        | Multiple conditions using AND/OR        | σ(dept_name = 'CS' AND salary > 50000)(instructor)                  |
+| Projection (π)       | Projecting multiple attributes          | π(dept_name, salary)(instructor)                                    |
+| Cartesian Product (×)| With projection to limit attributes     | π(instructor.name, department.name)(instructor × department)        |
+| Union (∪)            | Union after projection to match structure | π(name)(instructor) ∪ π(name)(teaching_staff)                     |
+| Intersection (∩)     | On projected compatible relations       | π(id)(student) ∩ π(id)(alumni)                                      |
+| Difference (−)       | Difference with projected compatible sets| π(id)(student) − π(id)(alumni)                                      |
+| Join (⨝)             | Join with filter condition              | instructor ⨝ (instructor.dept_id = department.id)                   |
+
+---
+
+### Level 3
+
+| Operation            | Description                                   | Example                                                                                      |
+|----------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
+| Selection (σ)        | Nested logic with NOT, multiple conditions    | σ(NOT(dept_name = 'CS') OR salary < 30000)(instructor)                                       |
+| Projection (π)       | Projection after selection/join               | π(name)(σ(dept_name = 'CS')(instructor))                                                     |
+| Cartesian Product (×)| Used with selection to simulate join          | σ(instructor.dept_id = department.id)(instructor × department)                              |
+| Union (∪)            | Union after filtered and renamed results      | ρ(A ← π(name)(σ(dept_name='CS')(instructor))) ∪ ρ(B ← π(name)(σ(dept_name='Math')(instructor))) |
+| Intersection (∩)     | Nested with selection or join                 | π(name)(σ(dept_name='CS')(instructor)) ∩ π(name)(σ(salary > 50000)(instructor))              |
+| Difference (−)       | Used with selection and projection            | π(name)(instructor) − π(name)(σ(dept_name='Math')(instructor))                               |
+| Join (⨝)             | Join with projection and filter combination   | π(instructor.name, department.name)(instructor ⨝ department)                                 |
+
+---
+
+###  Difficulty Calibration Criteria
+
+Each question’s level is determined by the following criteria:
+
+| Criterion                    | Level 1         | Level 2                | Level 3                        |
+|-----------------------------|------------------|-------------------------|--------------------------------|
+| Number of operations        | 1                | 2–3                     | >3                             |
+| Type of condition           | Simple equality  | AND/OR, inequality      | NOT                            |
+| Real-world abstraction      | Minimal          | Moderate                | High, needs translation        |
+| Schema interpretation depth| Low              | Medium                  | High                           |
+| Expected learner reasoning  | Recognition      | Understanding + execution| Application + design           |
+
+---
+
+###  Pedagogical Outcome
+
+- **Level 1** questions build confidence and ensure base concepts are clear.
+- **Level 2** encourages synthesis and operation chaining.
+- **Level 3** trains problem-solving, query design, and abstraction mapping.
+
+##  Quality Evaluation of Questions
+
+Our question generation system is evaluated across key dimensions of quality to ensure pedagogical effectiveness, conceptual accuracy, and practical relevance.
+
+###  Evaluation Dimensions
+
+| Criterion             | Description                                                          | Evaluation in Project                                                     |
+|-----------------------|----------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Clarity               | Is the question easy to understand, free of ambiguity?               | All questions are phrased in simple, instructional language.              |
+| Correctness           | Is the answer accurate and logically valid?                          | Generated answers are tested against relational algebra rules.            |
+| Relevance             | Is the question aligned with the operation and level selected?       | Each question is mapped to its operation and calibrated difficulty.       |
+| Variety of Types      | Are multiple question formats included (TFQ, MCQ, OEQ, etc.)?        | Yes — supports BQ, TFQ, MCQ, FIB, CQ, OEQ, etc.                           |
+| Coverage              | Are all major relational algebra operations and levels covered?      | Yes — all core operations from Selection to Division are implemented.     |
+| Scaffolding & Progression | Do questions increase in complexity with levels?                | Yes — based on number of operations, conditions, and schema complexity.   |
+| Schema Integration    | Are the questions based on meaningful schema and sample data?        | Yes — real schema and ER diagram are used to generate questions.          |
+| Answer Explanation    | Are the generated answers self-explanatory and verifiable?           | Yes — answers are displayed with syntax clarity and expression logic.     |
+
+### Summary
+
+Your system demonstrates a robust capacity to auto-generate high-quality questions with varied types, mapped operations, and clear answers. The inclusion of a **difficulty calibration mechanism**, **schema-aware logic**, and **answer verification** makes this project highly effective for educational use in DBMS and relational algebra.
+
+
+##  Code Implementation
+
+###  Modular Structure
+
+- Codebase is organized into modular components like:
+  - `SelectionGenerator`, `ProjectionGenerator`, etc. for each operation
+  - `DataLoader` for loading schema and sample data
+
+###  Clean & Readable
+
+- Follows consistent naming conventions  
+- Commented logically with docstrings where needed  
+- Readable and structured for both academic and developer use  
+
+###  Input Flexibility
+
+- User input taken via interface for:
+  - `Operation` (Selection, Join, etc.)
+  - `Difficulty Level` (Level 1, 2, or 3)
+  - `Question Type` (TFQ, MCQ, CQ, OEQ, etc.)
+  - `Number of Questions`
+
+###  Schema-Based ER Diagram Output
+
+- Displays an ER diagram of the selected schema  
+- Questions are generated based on schema attributes and relationships  
+- Sample data tables also shown for context  
+
+###  Output Features
+
+- Displays:
+  - Selected Question Type
+  - Generated Question
+  - Corresponding Answer (RA Expression)
+
+###  Data-Driven Design
+
+- All questions and schema are stored in `.py` files  
+- Easily expandable: Add new tables, operations, or difficulty levels  
+
+###  Well-Documented
+
+- Modules are logically grouped by operation and purpose  
+- Easy for future developers or educators to understand and modify  
+
+
+##  Documentation and GitHub Usage
+
+###  Initial Repository Setup
+
+**Overview:**  
+A GitHub repository was initialized at the start of the project to act as a central version control platform.
+
+**Context:**  
+In the early phase, repository usage was limited due to evolving project understanding and scope definition.
+
+---
+
+###  Offline Collaboration
+
+**Challenge:**  
+The scope and structure of the relational algebra project were not clearly established in the beginning.
+
+**Response:**
+
+- Development work and discussions were carried out in-person in the computer lab.
+- Hands-on brainstorming and real-time corrections proved more effective during early iterations.
+
+**File Sharing:**  
+USB drives and handwritten notes were used to share and review updates collaboratively.
+
+---
+
+###  Manual Version Control and Record Keeping
+
+**Process:**
+
+- Manual logs were kept for code changes, bug fixes, and question format updates.
+- Weekly sync-up meetings ensured each contributor had the latest versions.
+
+**Version Distribution:**  
+Stable builds and updated files were circulated via external storage devices.
+
+
+##  Innovation and Originality
+
+###  Conceptual Depth
+
+The project introduces a unique framework that bridges theoretical database operations with interactive question generation. By transforming Relational Algebra operations into multiple question types (TFQ, MCQ, OEQ, etc.), it provides a flexible and pedagogically sound learning tool that caters to various cognitive levels.
+
+###  Personalized Learning
+
+Users can select **operation**, **difficulty level**, and **question type** to generate tailored questions — making this system highly adaptable for self-paced learning, quizzes, and educational assessments.
+
+###  Intelligent Question Generator
+
+- Dynamically generates questions and answers based on schema and sample data.
+- Handles multiple relational algebra operations including `Selection`, `Projection`, `Join`, `Rename`, `Set Operations`, and `Cartesian Product`.
+- Supports **graphical output** such as ER diagrams and visual query representation.
+
+###  Algorithm Design Innovation
+
+Difficulty calibration is done through a structured algorithm that evaluates the number of operations, condition complexity, schema depth, and abstraction level — ensuring precise categorization into Level 1 (Easy), Level 2 (Medium), and Level 3 (Hard).
+
+###  Visual and Structured Output
+
+- Displays ER diagram of the input schema as part of the output.
+- Presents question type, generated questions, answers, sample data, and relational algebra queries in a clean, structured format.
+
+###  Modular and Extensible Design
+
+The modular Python codebase allows easy addition of new operations, schemas, or question templates — making the system scalable and reusable for other database learning contexts.
+
+
+##  Professionalism and Timeliness
+
+###  Engagement with Mentor (Rajurkar Ma'am)
+
+Throughout the project, we maintained respectful and constructive communication with our mentor, **Rajurkar Ma'am**. Although we were unable to meet as frequently as initially planned due to scheduling constraints, we ensured that progress was communicated during key checkpoints and evaluations. Whenever we had the opportunity, we shared updates, discussed challenges, and received valuable guidance.
+
+###  Meeting Attendance
+
+- All formal team meetings and project presentations were attended without absence.
+- We remained consistent in participating in internal sync-ups, evaluations, and review discussions.
+
+### Punctuality and Discipline
+
+We demonstrated punctuality in all scheduled meetings, including lab sessions and presentations. While informal planning sessions occasionally lagged due to conflicting academic workloads, we ensured realignment and stayed on track with deadlines and deliverables.
+
+###  Reporting and Transparency
+
+- We shared progress updates regularly, especially after major development phases (e.g., feature implementation, UI improvements, testing).
+- Our communication with the mentor was transparent, and we acknowledged areas needing improvement or revision promptly.
+
+###  Team Collaboration
+
+The project was carried out in a collaborative spirit. Within our team, we practiced open communication, mutual respect, and task sharing. Minor differences of opinion were handled constructively and did not affect the project’s momentum or final submission.
+
+###  Growth Through Professionalism
+
+This experience helped us understand the importance of professional discipline, consistent communication, and collective accountability. These values were key to maintaining momentum and producing quality work despite challenges.
+
+##  Summary Evaluation
+
+| Criteria                         | Description                                                                 | Score (0–4) | Score Description                                         |
+|----------------------------------|-----------------------------------------------------------------------------|-------------|------------------------------------------------------------|
+| 1. Domain Understanding          | Demonstrates clear understanding of the domain and its foundational, intermediate, and advanced topics | 3           | Shows good grasp with minor gaps; differentiates most topic levels |
+| 2. Topic-Question Mapping        | Effectively maps question types (TFQ, MCQ, FIB, ECQ, DIQ, CQ, OEQ) to appropriate topics and levels | 3           | Selects appropriate types for most topics and difficulty levels |
+| 3. Algorithm Design              | Designs scalable, parameterized algorithms for generating high-quality, valid questions | 3           | Algorithms are well-structured but may lack optimization     |
+| 4. Template Development          | Creates reusable templates for different question types and difficulty levels | 2           | Templates work but may be limited to specific cases or lack generalization |
+| 5. Difficulty Calibration        | Demonstrates consistent increase in difficulty from Level 1 to Level 3 for each topic | 2           | Inconsistent progression; some levels overlap in complexity  |
+| 6. Evaluation of Generated Questions | Uses methods to evaluate clarity, correctness, and learning value of generated questions | 3           | Applied thorough informal review and basic logic checks     |
+| 7. Code Implementation and Functionality | Implements clean, modular, and functional code with minimal redundancy | 3           | Code is readable and organized; minor scope for improvement |
+| 8. Documentation and GitHub Usage| Provides documentation and manages a GitHub repository with regular versioning | 2           | Minimal GitHub commits; good offline records but less online visibility |
+| 9. Innovation and Originality    | Introduces creative or original methods in logic, UI, or user interaction   | 2           | Basic innovation; focused more on completeness and reliability |
+| 10. Professionalism and Timeliness | Maintains discipline, collaboration, and meets submission timelines        | 3           | Mostly on time with minor delays; active participation and mentorship engagement |
+
+**Total**: **25/40**  
+**Percentage**: **60%**
+
+---
+
+**Final Remarks:**  
+The project demonstrates a solid understanding of relational algebra, with structured question generation logic and categorized difficulty. Further improvements could focus on optimizing templates, deeper GitHub versioning, and applying advanced optimization or creative logic strategies.
+

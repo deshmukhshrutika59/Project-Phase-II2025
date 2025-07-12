@@ -1,0 +1,9 @@
+# Core Python dependencies
+streamlit==1.35.0
+streamlit-mermaid==0.1.2
+
+# Markdown/diagram rendering in frontend
+markdown==3.6
+
+# Testing framework
+unittest2==1.1.0
